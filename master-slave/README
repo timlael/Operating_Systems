@@ -1,0 +1,153 @@
+/* $Author: o3-lael $
+ * $Date: 2016/02/20 15:43:29 $
+ * $Log: README,v $
+ * Revision 4.1  2016/02/20 15:43:29  o3-lael
+ * final branch ready to turn in
+ *
+ * Revision 3.4  2016/02/19 20:14:59  o3-lael
+ * added makefile and README descriptions and cleaned up
+ *
+ * Revision 3.3  2016/02/19 17:47:36  o3-lael
+ * added unique features section to describe my tinkering
+ *
+ * Revision 3.2  2016/02/19 01:17:27  o3-lael
+ * fixed timestamp issue in slave.c
+ * now ready for release
+ *
+ * Revision 3.1  2016/02/19 00:58:31  o3-lael
+ * Branch to release
+ *
+ * Revision 2.2  2016/02/18 21:27:27  o3-lael
+ * README complete
+ *
+ * Revision 2.1  2016/02/18 14:57:52  o3-lael
+ * Branch
+ * Program is functionally complete
+ * Now it is time to clean up and fine tune
+ *
+ * Revision 1.1  2016/02/15 16:06:31  o3-lael
+ * Initial revision
+ *
+ * $State: Exp $
+ * $Revision: 4.1 $
+*/
+****************************************************************************
+*                          Tim M. Lael                                     *
+*                    CS 4760 Project 2 README                              *
+*                                                                          *
+*    This file provides a brief description of project one and its use.    *
+*                                                                          *
+*                                                                          *
+****************************************************************************
+
+To Compile:
+	Run make. As a result, two executables master and slave will be 
+	created. make clean will remove default output file - cstest -
+	and executable files created durning a normal compilation.
+
+To Run:
+	Simply type master from a shell. Make sure both of the executables 
+	are in the current working directory, or provide the complete path. 
+	Some environments will require specifying the current working 
+	directory when running by typing ./master. By default, master will
+	spawn 19 child (slave) processes and run for a maximum of 60 
+	seconds before the entire process tree is terminated and all 
+	shared processes and shared memory are cleaned up and released. 
+	Output will be written to a file named cstest.
+
+Optional Arguments:
+	Typing master -h from the command line will display all usage
+	options and information about each. To summarize:
+	no optional arguments - default operation
+	ARG:	EFFECT:
+	-r	Dispalys the README file
+	-f str	Directs output to file (str) overriding default cstest
+	-t n	Sets maximum running time to n seconds
+	-s n	Sets maximum number of child (slave) processes to n
+	-h	Displays help/usage information
+
+	Each of the three arguments that require additional arguments
+	will warn the user if required arguments are missing
+
+Unique Features:
+	In the Peterson Algorithm, I altered the turn handoff to make
+	the turn more random. Instead of increasing turn count by 1 and
+	performing modulo number of slaves on it, I assign a random value
+	modulo number of slaves to j. The effect is noticable in both, the
+	terminal output and the text file. Prior to this alteration, 
+	processes invariably settled into a sequential progression after
+	the first turn or two took place. Now, turns are very random.
+	There is a tradeoff to this change though. Once made, execution
+	time seemed to increase - most likely due to increased spin waits.
+
+General Project Description:
+	Per the assignment definition and further classroom discussion,
+	master generates 19 child processes and has a maximum running time
+	of 60 seconds -  both re-configurable via command line argument.
+	After master reaches the time limit, it kills all processes and
+	releases shared memory. Master also handles signals and prints
+	a message upon detecting Ctrl-C. The children that master spawns
+	run the slave executable which uses the shared memory allocated in
+	master. Each slave process writes to a file, cstest, which is also
+	re-configurable via command line argument. The writing to this file
+	is assured mutual exclusivity through the use of Peterson's algorithm.
+	This exclusivity is implemented in slave.c. Each slave process
+	writes to the output file three times in the following format:
+		File modified by process number xx at time hh:mm
+	where xx is the process number specified in the master (1-19).
+	Slaves kill themselves upon receiving an interrupt signal and print
+	a message indicating this to stderr.	
+
+Project File Description:
+	As turned in, this project consists of 6 files: master.c, master.h,
+	slave.c, slave.h, Makefile and README. 
+	After successful compilation two more files are created: master
+	and slave - the executables.
+	Running make clean will remove the  master executable and the slave
+	executable.
+	
+	Each file is heavily commented, but a brief description follows.
+	
+	master.c - 
+	This is the master process which handles user input
+	and spawns slaves. The maximum process running time is limited by 
+	an alarm signal handler. All signal handling takes place in master
+	as dictated by the project requirements.
+	
+	master.h -
+	This is the header file for master.c which contains all includes, 
+	function prototypes and variables which can be declared globally.
+
+	slave.c -
+	This is the slave process which is run by each child. After some 
+	initial setup, each slave runs Peterson's algorithm to ensure it
+	has exclusivity to write to a text file three times. There are
+	delays upon entry to the critical section and before exit. Each 
+	slave also prints its actions to stderr as required.
+
+	slave.h -
+	This is the header file for slave.c which contains all includes,
+	function prototypes and variables which can be declared globally.
+
+	master - 
+	compiled master executable which is run from the command line
+	with optional arguments if desired.
+
+	slave - 
+	compiled slave executable which is run by master using execlp so
+	that it can be run from a relative path and arguments can be passed.
+	This can be run from command line provided the correct arguments 
+	are passed and the shared memory segment to be attached to is known.
+	That said, it is not intended to be run this way.
+
+	Makefile -
+	A makefile which can be run as "make", "make all", "make master", 
+	"make slave" or "make clean". make and make all have the same
+	result - both executables are compiled. make master and make slave
+	compile their respective executables. make clean will remove any 
+	executables as well as the cstest file - if it exists.
+	
+	README -
+	This file.
+***************************************************************************
+eof

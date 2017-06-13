@@ -1,0 +1,44 @@
+#!/bin/bash
+# This script clears the terminal then performs an interactive checkout
+# if run from the src directory with RCS nested below src (src/RCS).
+# All .h files, all .c files, the README and the Makefile are checked out.
+checkout(){
+	cd ./RCS
+	co -l *
+	mv -f ./*.h ../
+	mv -f ./*.c ../
+	mv -f ./README ../
+	mv -f ./Makefile ../
+	echo "Check out complete."
+	cd ../
+	rm FILES_ARE_CHECKED_IN
+	touch FILES_ARE_CHECKED_OUT
+	pwd
+	ls -la
+	exit
+}
+leave(){
+	echo "No checkout performed."
+	echo "Current working file set remains unchanged:"
+	pwd
+	ls -la
+	exit
+}
+tryagain(){
+	echo "Invalid choice. Read carefully."
+	echo "I clearly asked y or n."
+	echo "You can reply Y or N if you want to be difficult, but you didn't even do that."
+}
+clear
+echo "Checking project out from src/RCS ..."
+echo "This will check the project out from RCS and overwrite any"
+echo "existing files in this directory with the checked out files."
+while true
+do
+	read -r -p "Are you sure you want to check out the project (y/n)? " choice
+	case "$choice" in
+	n|N) leave;;
+	y|Y) checkout;;
+	*) tryagain;;
+esac 
+done

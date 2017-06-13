@@ -1,0 +1,57 @@
+#!/bin/bash
+# This script clears the terminal then performs an interactive check-in
+# if run from the src directory with RCS nested below src (src/RCS).
+# folder structure should be as follows to use without modification:
+# project/src/RCS where "project" is the base folder for the project
+# it can, of course, have a different and more meaningful name. e.g. 4760p1/src/RCS
+# The checkin and get scripts should reside in the src directory
+
+# All .h files, all .c files, the README and the Makefile are checked in.
+checkin(){
+	echo "Checking project into src/RCS..."
+	rm FILES_ARE_CHECKED_OUT
+	touch FILES_ARE_CHECKED_IN
+	cp -f ./*.h ./RCS
+	cp -f ./*.c ./RCS
+	cp -f ./README ./RCS
+	cp -f ./Makefile ./RCS
+	cd ./RCS
+	ci *
+#	ci -f -r2 * # modify this line to force branches to revision number (r)
+	echo "Check in complete."
+	echo "Current file set in revision control:"
+	pwd
+	ls -la
+	exit
+}
+# Negative response action leaves files as-is and tells the user.
+# Negative response also prints CWD and lists files in that directory
+leave(){
+	echo "No checkin performed."
+	echo "Working file set remains in src:"
+	pwd
+	ls -la
+	exit
+}
+# On case failure, prompt user for correct input
+tryagain(){
+	echo "Invalid choice. Read carefully."
+	echo "I clearly asked y or n. You can reply Y or N if you want to be difficult."
+}
+# Clear screen and begin interactive checkin
+clear
+echo "Checking project into src/RCS ..."
+echo "This will copy the working src files to ./RCS and perform a check in"
+echo "If you want to branch, answer n, vim checkin and modify appropriately."
+
+# User prompt to determine if checkin was desired
+while true
+do
+	read -r -p "Are you sure you want to check in the project (y/n)? " choice
+	# case to parse response and respond accordingly
+	case "$choice" in
+	n|N) leave;;
+	y|Y) checkin;;
+	*) tryagain;;
+esac 
+done

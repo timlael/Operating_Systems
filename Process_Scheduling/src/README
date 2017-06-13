@@ -1,0 +1,65 @@
+/*$Author: o3-lael $
+* $Date: 2016/03/24 02:13:40 $
+* $Log: README,v $
+* Revision 4.3  2016/03/24 02:13:40  o3-lael
+* modified make all instruction
+*
+* Revision 4.2  2016/03/24 00:27:51  o3-lael
+* readme completed
+*
+* Revision 4.1  2016/03/21 15:24:44  o3-lael
+* project functional.
+* branching for final cleanup and release
+*
+* Revision 3.1  2016/03/17 01:42:36  o3-lael
+* branched to sync file versions with addition of up.c and up.h
+*
+* Revision 2.1  2016/03/16 15:19:08  o3-lael
+* branching to v2 and implementing forked master/slave functionality
+*
+* Revision 1.1  2016/03/12 18:23:37  o3-lael
+* Initial revision
+*
+* $State: Exp $
+* $Revision: 4.3 $
+*/
+****************************************************************************
+*                          Tim M. Lael                                     *
+*                    CS 4760 Project 4 README                              *
+*                                                                          *
+*    This file provides a brief description of project one and its use.    *
+*                                                                          *
+*                                                                          *
+****************************************************************************
+
+To Compile:
+	Run "make all". As a result, two executables oss and up will be 
+	created. "make clean" will remove archive and object files created 
+	durning a normal compilation. "make realclean" will remove the same
+	same files as make clean and additionally remove executables and
+	the default output file cstest.
+
+To Run:
+	Simply type oss from a shell. 
+	Some environments will require specifying the current working 
+	directory when running by typing ./oss. By default, oss will
+	spawn 19 user processes (up). 
+	Default output will be written to a file named cstest.
+
+Optional Arguments:
+	Typing master -h from the command line will display all usage
+	options and information about each. To summarize:
+	no optional arguments - default operation
+	ARG:	EFFECT:
+	-r	Dispalys the README file
+	-f str	Directs output to file (str) overriding default cstest
+	-s n	Sets maximum number of child (slave) processes to n
+	-h	Displays help/usage information
+
+	Each of the three arguments that require additional arguments
+	will warn the user if required arguments are missing
+
+Output:
+	The output written to cstest will provide details on each
+	user process as well as total simulator stats at the end of
+	the report.

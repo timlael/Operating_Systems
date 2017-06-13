@@ -1,0 +1,71 @@
+/*$Author: o3-lael $
+* $Date: 2016/04/28 02:29:59 $
+* $Log: README,v $
+* Revision 5.1  2016/04/28 02:29:59  o3-lael
+* previous chekin note on branch 4 didn't take
+* this is a recovery branch due to Hoare issues
+* Hoare was unstable 26 and 27 April and user minx files were in my vim .swp
+* after an immediate shutdown on 27 APR. This project is complete and a local 
+* copy that was recovered.
+*
+* Revision 4.1  2016/04/28 02:24:13  o3-lael
+* see note on main makefile
+*
+* Revision 3.4  2016/04/27 16:44:59  o3-lael
+* *** empty log message ***
+*
+* Revision 3.3  2016/04/27 05:10:46  o3-lael
+* *** empty log message ***
+*
+* Revision 3.2  2016/04/27 05:08:46  o3-lael
+* corrected parse arg error
+*
+* Revision 3.1  2016/04/27 04:26:19  o3-lael
+* final working before comments
+*
+* Revision 2.1  2016/04/22 14:27:40  o3-lael
+* branching to revision 2 
+* major implementation change moving all oss child spawn and management to functions
+*
+* Revision 1.1  2016/04/14 19:17:48  o3-lael
+* Initial revision
+*
+* $State: Exp $
+* $Revision: 5.1 $
+*/
+****************************************************************************
+*                          Tim M. Lael                                     *
+*                    CS 4760 Project 6 README                              *
+*                                                                          *
+*    This file provides a brief description of project one and its use.    *
+*                                                                          *
+*                                                                          *
+****************************************************************************
+To Compile:
+	Run "make". As a result, two executables oss and up will be 
+	created. "make clean" will remove archive and object files created 
+	durning a normal compilation. "make realclean" will remove the same
+	same files as make clean and additionally remove executables.
+
+To Run:
+    Simply type oss from a shell.
+	Some environments will require specifying the current working
+	directory when running by typing ./oss. By default, oss will
+	spawn 12 user processes (up).
+
+Optional Arguments:
+    Typing oss -h from the command line will display all usage
+	options and information about each. To summarize:
+	no optional arguments - default operation
+	ARG:    	EFFECT:
+	-r  		Dispalys the README file
+	-u n    	Sets maximum number of child (up) processes to n
+	-t n    	Sets maximum running time to n
+	-h  		Displays help/usage information
+
+Output:
+	Output is to the terminal and includes user process cration/termination 
+	status, signal interaction status and paging statistics.
+
+	Each of the arguments that require additional arguments
+	will warn the user if required arguments are missing.

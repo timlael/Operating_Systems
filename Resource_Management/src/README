@@ -1,0 +1,73 @@
+/*$Author: o3-lael $
+* $Date: 2016/04/10 16:21:35 $
+* $Log: README,v $
+* Revision 2.2  2016/04/10 16:21:35  o3-lael
+* written
+*
+* Revision 2.1  2016/04/08 20:58:33  o3-lael
+* base project working correctly again
+* branching before resource allocation implementation
+*
+* Revision 1.1  2016/03/27 15:35:39  o3-lael
+* Initial revision
+*
+* $State: Exp $
+* $Revision: 2.2 $
+*/
+****************************************************************************
+*                          Tim M. Lael                                     *
+*                    CS 4760 Project 5 README                              *
+*                                                                          *
+*    This file provides a brief description of project one and its use.    *
+*                                                                          *
+*                                                                          *
+****************************************************************************
+
+Unfortunately, this project is incomplete.
+The base requirements COMPLETED are:
+- Logical clock residing in shared memory accessed as a critical resource
+via semaphore.
+- oss allocates shared memory for system data structures including resource 
+descriptors for each resource.
+- Resource descriptors reside in shared memory and are accessible to children
+- 20 resource descriptors consisting of 20% +/- 5% sharable.
+- Each resource (except for sharable) has a random 1 - 10 number available.
+- User processes are forked randomly between 1 - 500ms on logical time.
+- Each user process declares maximum claims
+
+Items PARTIALLY COMPLETED
+- As turned in, the system is always in a safe state as allocations are limited to 
+resources based upon availability. The algorithm is included, but oss does not run 
+deadlock avoidance algorithm.
+
+Items NOT COMPLETED
+- user processes do not check for random time to complete. This is easily implemented
+similarly to forking times, but since a wait for resources was not established, it seemed
+silly to check for completion time.
+- stats were not gathered since there was no waiting time established by a resource wait.
+
+To Compile:
+	Run "make". As a result, two executables master and slave will be 
+	created. "make clean" will remove archive and object files created 
+	durning a normal compilation. "make realclean" will remove the same
+	same files as make clean and additionally remove executables and
+	the default output file cstest.
+
+To Run:
+    Simply type oss from a shell.
+	Some environments will require specifying the current working
+	directory when running by typing ./oss. By default, oss will
+	spawn 18 user processes (up).
+
+Optional Arguments:
+    Typing master -h from the command line will display all usage
+	options and information about each. To summarize:
+	no optional arguments - default operation
+	ARG:    	EFFECT:
+	-r  		Dispalys the README file
+	-f str  	Directs output to file (str) overriding default cstest
+	-s n    	Sets maximum number of child (slave) processes to n
+	-h  		Displays help/usage information
+
+	Each of the three arguments that require additional arguments
+	will warn the user if required arguments are missing.

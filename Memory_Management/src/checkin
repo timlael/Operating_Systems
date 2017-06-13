@@ -1,0 +1,51 @@
+#!/bin/bash
+# This script clears the terminal then performs an interactive check-in
+# if run from the src directory with RCS nested below src (src/RCS).
+# All .h files, all .c files, the README and the Makefile are checked in.
+checkin(){
+	make realclean
+	echo "Checking project into src/RCS..."
+	rm FILES_ARE_CHECKED_OUT
+	touch FILES_ARE_CHECKED_IN
+	cp -f ./main/oss.h ./RCS
+	cp -f ./main/oss.c ./RCS
+	cp -f ./main/up.h ./RCS
+	cp -f ./main/up.c ./RCS
+	cp -f ./main/shared.h ./RCS
+	cp -f ./main/shared.c ./RCS
+	cp -f ./README ./RCS
+	cp -f ./Makefile ./RCS
+	cp -f ./main/Makefile ./RCS/main_Makefile
+	cd ./RCS
+	ci *
+#	ci -f -r5 * # modify this and the next two lines to force branches to revision number (r)
+	echo "Check in complete."
+	echo "Current file set in revision control:"
+	pwd
+	ls -la
+	exit
+}
+leave(){
+	echo "No checkin performed."
+	echo "Working file set remains in src:"
+	pwd
+	ls -la
+	exit
+}
+tryagain(){
+	echo "Invalid choice. Read carefully."
+	echo "I clearly asked y or n. You can reply Y or N if you want to be difficult."
+}
+clear
+echo "Checking project into src/RCS ..."
+echo "This will copy the working src files to ./RCS and perform a check in"
+echo "If you want to branch, answer n, vim checkin and modify appropriately."
+while true
+do
+	read -r -p "Are you sure you want to check in the project (y/n)? " choice
+	case "$choice" in
+	n|N) leave;;
+	y|Y) checkin;;
+	*) tryagain;;
+esac 
+done

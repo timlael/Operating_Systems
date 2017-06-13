@@ -1,0 +1,196 @@
+
+/*$Author: o3-lael $
+* $Date: 2016/03/10 02:23:55 $
+* $Log: README,v $
+* Revision 5.5  2016/03/10 02:23:55  o3-lael
+* modified checkin and get descriptions
+*
+* Revision 5.4  2016/03/10 02:20:38  o3-lael
+* added checkin and get file descriptions
+*
+* Revision 5.3  2016/03/10 02:14:56  o3-lael
+* README updated to reflect project 3
+*
+* Revision 5.2  2016/03/09 19:17:04  o3-lael
+* *** empty log message ***
+*
+* Revision 5.1  2016/03/09 19:13:56  o3-lael
+* folder structure and associated makefile implemented
+*
+* Revision 4.1  2016/03/09 19:06:49  o3-lael
+* *** empty log message ***
+*
+* Revision 3.2  2016/03/09 18:46:27  o3-lael
+* no change
+*
+* Revision 3.1  2016/03/09 18:10:47  o3-lael
+* still empty. now that the code is complete, I will write README
+*
+* Revision 2.2  2016/03/07 18:53:00  o3-lael
+* *** empty log message ***
+*
+* Revision 2.1  2016/03/07 15:31:45  o3-lael
+* Branch to rev. 2
+* clean break from old strategy. Now implementing monitor from class notes
+* README unchanged at this point
+*
+* Revision 1.2  2016/03/06 16:25:56  o3-lael
+* cleaned up RCS headers and added RCS keywords where missing
+* headers were funky on copy from project 2 since I didn't clean them up correctly before copy
+*
+* Revision 1.1  2016/03/04 15:37:19  o3-lael
+* Initial revision
+*
+* $State: Exp $
+* $Revision: 5.5 $
+*/
+****************************************************************************
+*                          Tim M. Lael                                     *
+*                    CS 4760 Project 3 README                              *
+*                                                                          *
+*    This file provides a brief description of project one and its use.    *
+*                                                                          *
+*                                                                          *
+****************************************************************************
+
+To Compile:
+	Run "make". As a result, two executables master and slave will be 
+	created. "make clean" will remove archive and object files created 
+	durning a normal compilation. "make realclean" will remove the same
+	same files as make clean and additionally remove executables and
+	the default output file cstest.
+
+To Run:
+	Simply type master from a shell. 
+	Some environments will require specifying the current working 
+	directory when running by typing ./master. By default, master will
+	spawn 19 child (slave) processes and run for a maximum of 60 
+	seconds before the entire process tree is terminated and all 
+	shared processes, semaphores and shared memory are cleaned up and 
+	released. Default output will be written to a file named cstest.
+
+Optional Arguments:
+	Typing master -h from the command line will display all usage
+	options and information about each. To summarize:
+	no optional arguments - default operation
+	ARG:	EFFECT:
+	-r	Dispalys the README file
+	-f str	Directs output to file (str) overriding default cstest
+	-t n	Sets maximum running time to n seconds
+	-s n	Sets maximum number of child (slave) processes to n
+	-h	Displays help/usage information
+
+	Each of the three arguments that require additional arguments
+	will warn the user if required arguments are missing
+
+Unique Features:
+	In this project, mutual exclusion is implemented via a monitor
+	using wait and signal semaphores. This project also employs two
+	subdirectories and a more complex Makefile implementation to 
+	deal with the file structure while building the project. The 
+	Makefile in the project root (/src) is the control makefile which
+	calls each of the other two Makefiles in each subdirectory.
+
+General Project Description:
+	Per the assignment definition and further classroom discussion,
+	master generates 19 child processes and has a maximum running time
+	of 60 seconds -  both re-configurable via command line argument.
+	After master reaches the time limit, it kills all processes and
+	releases shared memory and semaohores. Master also handles signals 
+	and prints a message upon detecting Ctrl-C. The children that master
+	spawns each run the slave executable which uses shared memory allocated 
+	in master. Each slave process writes to a default file, cstest, which is also
+	re-configurable via command line argument. The writing to this file
+	is assured mutual exclusivity through the use of a monitor using semaphores.
+	This exclusivity is implemented in monitorlib.c and slave.c. Each slave 
+	process writes to the output file three times in the following format:
+		File modified by process number xx at time hh:mm
+	where xx is the process number specified in the master (1-19).
+	Slaves kill themselves upon receiving an interrupt signal and print
+	a message indicating this to stderr.	
+
+Project File Description:
+	As turned in, this project consists of 10 files in 3 directories.
+	/src contains: Makefile and README
+	/src/main contains: master.c, master.h, slave.c, slave.h and Makefile
+	/src/monitor contains: monitorlib.c, monitor.h and Makefile 
+	After successful compilation the following additional files are created: 
+	master and slave - the executables
+	monitor.o and libmonitorlib.a the monitor object and archive files
+	master.o and slave.o the master and slave object files
+	
+	Each file is heavily commented, but a brief description follows.
+	
+	master.c - 
+	This is the master process which handles user input and spawns slaves. 
+	The maximum process running time is limited by an alarm signal handler. 
+	All signal handling takes place in master as dictated by the project 
+	requirements.
+	
+	master.h -
+	This is the header file for master.c which contains all includes, 
+	function prototypes and variables which can be declared globally.
+
+	slave.c -
+	This is the slave process which is run by each child. After some 
+	initial setup, each slave enters a monitor to ensure that it
+	has exclusivity to write to a text file three times. There are
+	delays upon entry to the critical section and before exit. Each 
+	slave also prints its actions to stderr as required.
+
+	slave.h -
+	This is the header file for slave.c which contains all includes,
+	function prototypes and variables which can be declared globally.
+
+	monitorlib.c -
+	This is the source file for the monitor/semaphore implementation
+	which is used to ensure exclusive file access for the slave processes.
+	It is compiled into an object file which is used to create an archive
+	file libmonitorlib.a. That file is then linked to slave.c/slave.o
+	during compilation.
+
+	monitor.h - 
+	The header file for monitorlib.c. This file contains includes,
+	global datatypes and function prototypes for monitorlib.c
+
+	master - 
+	compiled master executable which is run from the command line
+	with optional arguments if desired.
+
+	slave - 
+	compiled slave executable which is run by master using execlp so
+	that it can be run from a relative path and arguments can be passed.
+	This can be run from command line provided the correct arguments 
+	are passed and the shared memory segment to be attached to is known.
+	That said, it is not intended to be run this way.
+
+	Makefile -
+	There are actually three Makefiles in three directories to control
+	the build process for this project. The Makefiles in /src/main and
+	/src/monitor are not intended to be run standalone, although they
+	may work if run in the proper order. The main Makefile in /src works
+	as follows:
+	It is a makefile which can be run as "make", "make clean" and 
+	"make realclean".
+	make builds the complete project.
+	make clean removes all object and archive files.
+	make realclean removes all object, archive, executable and default 
+	output files.
+	
+	README -
+	This file.
+
+Files Not Directly Related To Project:
+
+	checkin - 
+	This is a shell script that I used to expedite/automate the RCS 
+	checkin process. Creates a dummy file to easily indicate file status
+	FILES_ARE_CHECKED_IN indicates the obvious.
+
+	get - 
+	This is a shell script that I used to expedite/automate the RCS
+	checkout process. Creates a dummy file to easily indicate file status.
+	FILES_ARE_CHECKED_OUT indicates the obvious.
+
+***************************************************************************
+eof

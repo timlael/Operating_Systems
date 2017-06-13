@@ -1,0 +1,106 @@
+$Author: o3-lael $
+$Date: 2016/02/13 18:48:31 $
+$Log: README,v $
+Revision 1.6  2016/02/13 18:48:31  o3-lael
+included explanation of new command line switch functionality in README
+
+Revision 1.5  2016/02/11 15:50:54  o3-lael
+adding keywords
+
+$State: Exp $
+$Revision: 1.6 $
+
+****************************************************************************
+*                          Tim M. Lael                                     *
+*                    CS 4760 Project 1 README                              *
+*                                                                          *
+*    This file provides a brief description of project one and its use.    *
+*                                                                          *
+*                                                                          *
+****************************************************************************
+
+To Compile:
+	Run make. As a result, the executable "driver" will be created.
+	make clean will remove any object (.o), archive (.a), log (.log)
+	and executable files created durning a normal compilation.
+
+To Run:
+	Simply type driver from a shell. Make sure the driver executable 
+	is in the current working directory, or provide the complete path. 
+	Some environments will require specifying the current working 
+	directory when running by typing ./driver.
+
+Optional Arguments:
+	I have provided a mechanism for displaying this README file from 
+	the command line using the getopt() function. To use this feature, 
+	simply use the -h switch from the command line like this: 
+	./driver -h
+	There is also a command line switch to display command usage. 
+	Running ./driver -u will display all options to run the driver 
+	executable and provide an explanation of switches and their function.
+
+General Project Description:
+	As turned in, this project consists of 5 files: driver.c, log.h, 
+	loglib.c, Makefile and README. 
+	After successful compilation four more files are created: driver,
+	driver.o, loglib.o and libmyloglib.a. The last is the library
+	containing the functions in loglib.c.
+	Running make clean will remove the driver.o object file, the driver
+	executable, the loglib.o object file, logfiles from previous runs 
+	and the libmyloglib.a archive.
+	If, the first time the program is run, the -h switch is used, 
+	no additional files will be created. However, two additional .log 
+	files are created if the program is allowed to run as normal, with 
+	no -h switch. These files are o3-lael.log and o3-lael2.log. 
+	The first is a save point of the log file as the program is in use 
+	with commands ran and logged. The second is a save point of the log 
+	file after a successful clear of the log and one additional command run.
+
+Project File Description:
+	log.h - header file which contains function prototypes and datatypes
+	for functions and data used in loglib.c
+
+	loglib.c - this is where the main logging functions reside.
+	Those functions are written using the skeleton code from the book's
+	excercise 2.13 and are as follows:
+
+	addmsg() - places a message in the log_t linked list. The message is
+	uses the data_t structure which contains a string and a timestamp. If
+	the log_t linked list is null, the incoming message is placed as the 
+	first element and a head and tail pointer are both set to that message.
+	On successive entries, the message is placed at the tail of the list
+	and the tail pointer is updated to reflect this.
+
+	clearlog() - this function is used to iterate through the linked list
+	while clearing messages anf freeing memory that was allocated to 
+	those messages. If the log is empty when called, an appropriate 
+	message is displayed indicating that the log was empty to start.
+
+	getlog() - if the log is empty, returns null. if the log has entries, 
+	the data_t element string and data_t element timestamp for each log
+	entry are concatenated and displayed on screen in a readable format.
+
+	savelog() - saves the contents of the log_T linked list to a text file
+	and reports success/failure. Each log event is on its own line in the 
+	format of: data_t.string @ data_t.time.
+
+	driver.c - includes main and provides a method run() for calling functions 
+	to be logged. This file also houses the getopt() functionality. The run() 
+	function uses system() to execute commands and returns error/success status 
+	for use in logging. run() also provides some text string formatting before 
+	passing that string along to create a log entry using an addmsg() call.
+	
+	loglib.o and driver.o are object files for loglib.c and driver.c 
+	respectively.
+	
+	libmyloglib.a is the library archive created from loglib.c/loglib.o.
+
+	Makefile - provides one-step archive creation/project compilation. 
+	Also provides a clean function to remove files created during compilation.
+	It's a makefile.
+
+	README - This file.
+
+
+************************************************************************************
+eof 
